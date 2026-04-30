@@ -12,18 +12,17 @@ public static class IFEORunner
         string appName = Path.GetFileName(appPath);
         string[] passArgs = args.Length > 1 ? args[1..] : Array.Empty<string>();
 
-        var config = ConfigManager.Load();
         int count = RunningCounter.Increment();
 
         if (count == 1)
         {
-            IdleHelper.SetTimeout(config.IdleGame);
-            NotificationHelper.Show("StayAwake", $"{appName} aberto — ociosidade: {config.IdleGame} min");
+            IdleHelper.KeepAwake();
+            NotificationHelper.Show("StayAwake", $"{appName} aberto — monitor sempre ligado");
         }
 
         try
         {
-            var psi = new ProcessStartInfo(appPath) { UseShellExecute = false };
+            var psi = new ProcessStartInfo(appPath) { UseShellExecute = true };
             foreach (var arg in passArgs) psi.ArgumentList.Add(arg);
             Process.Start(psi)?.WaitForExit();
         }
@@ -32,9 +31,9 @@ public static class IFEORunner
             int remaining = RunningCounter.Decrement();
             if (remaining == 0)
             {
-                IdleHelper.SetTimeout(config.IdleNormal);
-                NotificationHelper.Show("StayAwake", $"{appName} fechado — ociosidade: {config.IdleNormal} min restaurado");
-                Thread.Sleep(5500); // aguarda notificação aparecer antes de encerrar
+                IdleHelper.AllowSleep();
+                NotificationHelper.Show("StayAwake", $"{appName} fechado — ociosidade restaurada");
+                Thread.Sleep(5500);
             }
         }
     }

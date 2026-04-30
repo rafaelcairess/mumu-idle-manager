@@ -1,20 +1,21 @@
-using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace StayAwake;
 
 public static class IdleHelper
 {
-    public static void SetTimeout(int minutes)
-    {
-        Run($"/change monitor-timeout-ac {minutes}");
-        Run($"/change standby-timeout-ac {minutes}");
-    }
+    [DllImport("kernel32.dll")]
+    private static extern uint SetThreadExecutionState(uint esFlags);
 
-    private static void Run(string args) =>
-        Process.Start(new ProcessStartInfo("powercfg", args)
-        {
-            CreateNoWindow  = true,
-            UseShellExecute = true,   // UseShellExecute=true permite elevação via Verb
-            Verb            = "runas" // pede admin só pro powercfg, não pro app inteiro
-        })?.WaitForExit();
+    private const uint ES_CONTINUOUS       = 0x80000000;
+    private const uint ES_SYSTEM_REQUIRED  = 0x00000001;
+    private const uint ES_DISPLAY_REQUIRED = 0x00000002;
+
+    // Impede o monitor e o sistema de dormir — sem precisar de admin
+    public static void KeepAwake() =>
+        SetThreadExecutionState(ES_CONTINUOUS | ES_DISPLAY_REQUIRED | ES_SYSTEM_REQUIRED);
+
+    // Restaura o comportamento normal do Windows
+    public static void AllowSleep() =>
+        SetThreadExecutionState(ES_CONTINUOUS);
 }

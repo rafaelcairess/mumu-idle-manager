@@ -7,11 +7,9 @@ namespace StayAwake;
 
 public class ConfigForm : Form
 {
-    private readonly ListBox       _list;
-    private readonly NumericUpDown _spinGame;
-    private readonly NumericUpDown _spinNormal;
-    private readonly AppConfig     _config;
-    private readonly string        _selfPath;
+    private readonly ListBox   _list;
+    private readonly AppConfig _config;
+    private readonly string    _selfPath;
 
     public ConfigForm()
     {
@@ -19,79 +17,74 @@ public class ConfigForm : Form
         _selfPath = Environment.ProcessPath
                     ?? Path.Combine(AppContext.BaseDirectory, "StayAwake.exe");
 
-        // Janela
+        var icoPath = Path.Combine(AppContext.BaseDirectory, "stayawake.ico");
+
         Text            = "StayAwake";
-        Size            = new Size(440, 350);
+        ClientSize      = new Size(420, 260);
         StartPosition   = FormStartPosition.CenterScreen;
         FormBorderStyle = FormBorderStyle.FixedDialog;
         MaximizeBox     = false;
-
-        var icoPath = Path.Combine(AppContext.BaseDirectory, "stayawake.ico");
         if (File.Exists(icoPath)) Icon = new Icon(icoPath);
 
-        // Label apps
+        // Label
         var lblApps = new Label
         {
             Text     = "Apps monitorados:",
-            Location = new Point(20, 15),
+            Location = new Point(20, 16),
             Size     = new Size(200, 18)
         };
 
         // Lista
-        _list = new ListBox { Location = new Point(20, 35), Size = new Size(385, 120) };
+        _list = new ListBox
+        {
+            Location = new Point(20, 38),
+            Size     = new Size(380, 140)
+        };
         foreach (var app in _config.Apps) _list.Items.Add(app);
 
         // Botão adicionar
-        var btnAdd = new Button { Text = "+ Adicionar app", Location = new Point(20, 165), Size = new Size(120, 28) };
+        var btnAdd = new Button
+        {
+            Text     = "+ Adicionar app",
+            Location = new Point(20, 188),
+            Size     = new Size(120, 28)
+        };
         btnAdd.Click += OnAdd;
 
         // Botão remover
-        var btnRemove = new Button { Text = "Remover", Location = new Point(150, 165), Size = new Size(80, 28) };
-        btnRemove.Click += (_, _) => { if (_list.SelectedItem != null) _list.Items.Remove(_list.SelectedItem); };
-
-        // Idle durante o app
-        var lblGame = new Label
+        var btnRemove = new Button
         {
-            Text     = "Ociosidade durante o app (min):",
-            Location = new Point(20, 220),
-            Size     = new Size(235, 18)
+            Text     = "Remover",
+            Location = new Point(150, 188),
+            Size     = new Size(80, 28)
         };
-        _spinGame = new NumericUpDown
+        btnRemove.Click += (_, _) =>
         {
-            Location = new Point(260, 218),
-            Size     = new Size(60, 20),
-            Minimum  = 1, Maximum = 480,
-            Value    = _config.IdleGame
+            if (_list.SelectedItem != null)
+                _list.Items.Remove(_list.SelectedItem);
         };
 
-        // Idle ao fechar
-        var lblNormal = new Label
+        // Salvar
+        var btnSave = new Button
         {
-            Text     = "Ociosidade ao fechar o app (min):",
-            Location = new Point(20, 258),
-            Size     = new Size(235, 18)
+            Text     = "Salvar",
+            Location = new Point(230, 220),
+            Size     = new Size(80, 28)
         };
-        _spinNormal = new NumericUpDown
-        {
-            Location = new Point(260, 256),
-            Size     = new Size(60, 20),
-            Minimum  = 1, Maximum = 480,
-            Value    = _config.IdleNormal
-        };
-
-        // Botões Salvar / Cancelar
-        var btnSave = new Button { Text = "Salvar", Location = new Point(240, 295), Size = new Size(80, 28) };
         btnSave.Click += OnSave;
 
-        var btnCancel = new Button { Text = "Cancelar", Location = new Point(330, 295), Size = new Size(80, 28) };
+        // Cancelar
+        var btnCancel = new Button
+        {
+            Text     = "Cancelar",
+            Location = new Point(320, 220),
+            Size     = new Size(80, 28)
+        };
         btnCancel.Click += (_, _) => Close();
 
         Controls.AddRange(new Control[]
         {
-            lblApps, _list, btnAdd, btnRemove,
-            lblGame, _spinGame,
-            lblNormal, _spinNormal,
-            btnSave, btnCancel
+            lblApps, _list, btnAdd, btnRemove, btnSave, btnCancel
         });
     }
 
@@ -105,7 +98,8 @@ public class ConfigForm : Form
         if (dlg.ShowDialog() == DialogResult.OK)
         {
             var name = Path.GetFileName(dlg.FileName);
-            if (!_list.Items.Contains(name)) _list.Items.Add(name);
+            if (!_list.Items.Contains(name))
+                _list.Items.Add(name);
         }
     }
 
@@ -122,9 +116,7 @@ public class ConfigForm : Form
             if (!newApps.Contains(app))
                 IFEOHelper.Unregister(app);
 
-        _config.Apps       = newApps;
-        _config.IdleGame   = (int)_spinGame.Value;
-        _config.IdleNormal = (int)_spinNormal.Value;
+        _config.Apps = newApps;
         ConfigManager.Save(_config);
 
         MessageBox.Show(
