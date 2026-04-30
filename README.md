@@ -1,21 +1,19 @@
 # Idle Manager
 
-> Ajusta o tempo de ociosidade do Windows automaticamente enquanto um aplicativo escolhido está aberto. Funciona com qualquer programa.
+> Ajusta o tempo de ociosidade do Windows automaticamente quando um app escolhido está aberto. Você abre o app normalmente — o Idle Manager entra junto e sai junto. Nada fica rodando em background.
 
 ---
 
-## O problema
+## Como funciona
 
-Usar qualquer app com o Windows configurado para apagar o monitor em 10 minutos é irritante. Mudar nas configurações de energia toda vez é chato, e esquecer de reverter depois também.
+O Idle Manager usa um recurso nativo do Windows chamado **IFEO** para "entrar junto" com qualquer app configurado. Você continua abrindo o app da mesma forma que sempre abriu — o Idle Manager detecta isso e age automaticamente.
 
-## A solução
+```
+Você abre o app → Idle Manager ativa → ociosidade: 2h
+Você fecha o app → Idle Manager encerra → ociosidade: 10min
+```
 
-Dois executáveis simples — configure uma vez, use sempre:
-
-| Arquivo | Quando usar |
-|---|---|
-| `Idle Config.exe` | Primeira vez ou quando quiser trocar de app |
-| `Idle Manager.exe` | No dia a dia, no lugar do app diretamente |
+Nada fica rodando quando nenhum app monitorado está aberto.
 
 ---
 
@@ -23,19 +21,17 @@ Dois executáveis simples — configure uma vez, use sempre:
 
 **1. Configure uma vez:**
 
-Abra `Idle Config.exe` → clique em `...` → selecione o `.exe` do app → ajuste os tempos → Salvar.
+Abra `IdleManager.exe` → clique em `+ Adicionar app` → selecione o `.exe` desejado → ajuste os tempos → Salvar.
 
-**2. Use sempre:**
+**2. Use normalmente:**
 
-Abra `Idle Manager.exe`. Ele lê a configuração, abre o app, ajusta o timeout e restaura ao fechar — tudo automático.
-
-> O Windows pode pedir confirmação de administrador — necessário para alterar as configurações de energia.
+Abra seu app do jeito que sempre abre. O Idle Manager cuida do resto automaticamente.
 
 ---
 
-## Funciona com qualquer app
+## Múltiplos apps
 
-Netflix, MuMu Player, emuladores, players de vídeo, qualquer `.exe`. Quer mudar de app? Abre o `Idle Config.exe` de novo e seleciona outro.
+Você pode monitorar quantos apps quiser. Se dois estiverem abertos ao mesmo tempo, a ociosidade só é restaurada quando o **último** fechar.
 
 ---
 
@@ -43,9 +39,9 @@ Netflix, MuMu Player, emuladores, players de vídeo, qualquer `.exe`. Quer mudar
 
 | Campo | Descrição | Padrão |
 |---|---|---|
-| Aplicativo | `.exe` do app a monitorar | — |
-| Ociosidade durante o app | Tempo até o monitor apagar enquanto usa | 120 min |
-| Ociosidade ao fechar | Tempo restaurado após fechar o app | 10 min |
+| Apps monitorados | Lista de `.exe` a interceptar | — |
+| Ociosidade durante o app | Timeout enquanto o app estiver aberto | 120 min |
+| Ociosidade ao fechar | Timeout restaurado após fechar | 10 min |
 
 ---
 
@@ -53,11 +49,9 @@ Netflix, MuMu Player, emuladores, players de vídeo, qualquer `.exe`. Quer mudar
 
 | Arquivo | Descrição |
 |---|---|
-| `Idle Manager.exe` | Launcher principal |
-| `Idle Config.exe` | Configurador visual |
-| `config.json` | Suas preferências salvas |
-| `launcher.ps1` | Código-fonte do launcher |
-| `config.ps1` | Código-fonte do configurador |
+| `IdleManager.exe` | Único executável — configurador + motor |
+| `IdleManager.ps1` | Código-fonte |
+| `config.json` | Configurações salvas |
 
 ---
 
@@ -65,3 +59,4 @@ Netflix, MuMu Player, emuladores, players de vídeo, qualquer `.exe`. Quer mudar
 
 - Windows 10 / 11
 - PowerShell (já incluso no Windows)
+- Permissão de administrador (necessário para registrar os apps no sistema)
