@@ -6,14 +6,16 @@
 
 ## O problema
 
-Assistir ou usar qualquer app com o Windows configurado para apagar o monitor em 10 minutos é irritante. Mudar nas configurações de energia toda vez é chato, e esquecer de reverter depois também.
+Usar qualquer app com o Windows configurado para apagar o monitor em 10 minutos é irritante. Mudar nas configurações de energia toda vez é chato, e esquecer de reverter depois também.
 
 ## A solução
 
-Dois executáveis simples:
+Dois executáveis simples — configure uma vez, use sempre:
 
-- **Idle Config.exe** — escolha o aplicativo e defina os tempos de ociosidade
-- **Idle Manager.exe** — abre o app configurado, ajusta o timeout e restaura ao fechar
+| Arquivo | Quando usar |
+|---|---|
+| `Idle Config.exe` | Primeira vez ou quando quiser trocar de app |
+| `Idle Manager.exe` | No dia a dia, no lugar do app diretamente |
 
 ---
 
@@ -21,13 +23,29 @@ Dois executáveis simples:
 
 **1. Configure uma vez:**
 
-Abra `Idle Config.exe`, selecione o `.exe` do app desejado e ajuste os tempos.
+Abra `Idle Config.exe` → clique em `...` → selecione o `.exe` do app → ajuste os tempos → Salvar.
 
 **2. Use sempre:**
 
-Abra `Idle Manager.exe` no lugar do app diretamente. Ele cuida do resto.
+Abra `Idle Manager.exe`. Ele lê a configuração, abre o app, ajusta o timeout e restaura ao fechar — tudo automático.
 
 > O Windows pode pedir confirmação de administrador — necessário para alterar as configurações de energia.
+
+---
+
+## Funciona com qualquer app
+
+Netflix, MuMu Player, emuladores, players de vídeo, qualquer `.exe`. Quer mudar de app? Abre o `Idle Config.exe` de novo e seleciona outro.
+
+---
+
+## Configuração
+
+| Campo | Descrição | Padrão |
+|---|---|---|
+| Aplicativo | `.exe` do app a monitorar | — |
+| Ociosidade durante o app | Tempo até o monitor apagar enquanto usa | 120 min |
+| Ociosidade ao fechar | Tempo restaurado após fechar o app | 10 min |
 
 ---
 
@@ -35,21 +53,11 @@ Abra `Idle Manager.exe` no lugar do app diretamente. Ele cuida do resto.
 
 | Arquivo | Descrição |
 |---|---|
-| `Idle Manager.exe` | Launcher principal — **abra este** |
-| `Idle Config.exe` | Configurador — escolha o app e os tempos |
-| `config.json` | Gerado pelo Config com suas preferências |
-| `MuMuLauncher.ps1` | Código-fonte do launcher |
-| `MuMuConfig.ps1` | Código-fonte do configurador |
-
----
-
-## Configuração
-
-Abra `Idle Config.exe` e defina:
-
-- **Aplicativo** — qualquer `.exe` do seu PC
-- **Ociosidade durante o app** — tempo até o monitor apagar enquanto usa (padrão: 120 min)
-- **Ociosidade ao fechar** — tempo restaurado após fechar (padrão: 10 min)
+| `Idle Manager.exe` | Launcher principal |
+| `Idle Config.exe` | Configurador visual |
+| `config.json` | Suas preferências salvas |
+| `launcher.ps1` | Código-fonte do launcher |
+| `config.ps1` | Código-fonte do configurador |
 
 ---
 
