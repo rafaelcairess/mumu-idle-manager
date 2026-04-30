@@ -1,0 +1,4 @@
+*.cs        linguist-language=C#
+*.csproj    linguist-language=XML
+*.zip       linguist-generated=true
+*.ico       binary
