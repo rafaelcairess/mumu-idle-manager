@@ -6,7 +6,7 @@
 
 ## O problema
 
-Jogar pelo MuMu Player com o Windows configurado para suspender ou apagar o monitor em 10 minutos de inatividade é irritante. Mudar nas configurações de energia toda vez é chato, e esquecer de reverter depois também.
+Assistir algo pelo MuMu Player com o Windows configurado para suspender ou apagar o monitor em 10 minutos de inatividade é irritante. Mudar nas configurações de energia toda vez é chato, e esquecer de reverter depois também.
 
 ## A solução
 
@@ -42,8 +42,8 @@ Um executável que você abre no lugar do MuMu Player. Ele:
 Para ajustar os tempos, edite as variáveis no topo do `MuMuLauncher.ps1` e regenere o `.exe`:
 
 ```powershell
-$IdleGame   = 120  # minutos durante o jogo  (padrão: 2 horas)
-$IdleNormal = 10   # minutos fora do jogo    (padrão: 10 minutos)
+$IdleGame   = 120  # minutos enquanto assiste  (padrão: 2 horas)
+$IdleNormal = 10   # minutos fora do MuMu      (padrão: 10 minutos)
 ```
 
 Para regenerar o `.exe` após editar o `.ps1`:
