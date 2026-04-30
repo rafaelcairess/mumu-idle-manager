@@ -24,9 +24,7 @@ Um executável que você abre no lugar do MuMu Player. Ele:
 2. Aceite a confirmação de administrador — necessário para alterar configurações de energia
 3. O MuMu Player abre normalmente, o resto é automático
 
-Para ajustar os tempos, abra `MuMu Config.exe`:
-
-![config window](https://i.imgur.com/placeholder.png)
+Para ajustar os tempos, abra `MuMu Config.exe`.
 
 ---
 
@@ -51,16 +49,6 @@ Abra `MuMu Config.exe` e ajuste:
 - **Ociosidade ao fechar** — tempo restaurado após fechar o MuMu (padrão: 10 min)
 
 As configurações ficam salvas em `config.json` e são lidas automaticamente pelo launcher.
-
----
-
-## Recompilar após editar o `.ps1`
-
-```powershell
-Import-Module ps2exe
-Invoke-ps2exe -InputFile "MuMuLauncher.ps1" -OutputFile "MuMu Player.exe" -IconFile "mumu.ico" -NoConsole -RequireAdmin
-Invoke-ps2exe -InputFile "MuMuConfig.ps1"   -OutputFile "MuMu Config.exe"  -IconFile "mumu.ico" -NoConsole
-```
 
 ---
 
