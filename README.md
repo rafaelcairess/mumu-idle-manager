@@ -8,9 +8,10 @@ Criei o StayAwake pra resolver isso de forma automática. Você configura uma ve
 
 ## ⚡ Como usar
 
-1. Abra o `StayAwake.exe`
-2. Adicione os apps que você quer monitorar
-3. Pronto — pode fechar
+1. Baixe e extraia o `StayAwake.zip`
+2. Abra o `StayAwake.exe`
+3. Adicione os apps que você quer monitorar
+4. Pronto — pode fechar
 
 Da próxima vez que abrir um dos apps configurados, o Windows para de desligar automaticamente. Quando você fechar o app, tudo volta ao normal.
 
@@ -25,4 +26,5 @@ O StayAwake avisa quando ativa e quando desativa — aparece um balão no canto 
 ## 📋 Requisitos
 
 - Windows 10 ou 11
+- [.NET 8 Runtime](https://dotnet.microsoft.com/download/dotnet/8.0) instalado
 - Permissão de administrador na primeira vez que abrir
