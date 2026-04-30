@@ -1,34 +1,17 @@
 # === CONFIGURACOES (padroes — sobrescritos por config.json se existir) ===
 $IdleGame   = 120
 $IdleNormal = 10
+$AppExe     = ""
 
 $configPath = "$PSScriptRoot\config.json"
 if (Test-Path $configPath) {
     $cfg        = Get-Content $configPath | ConvertFrom-Json
     $IdleGame   = $cfg.IdleGame
     $IdleNormal = $cfg.IdleNormal
+    $AppExe     = $cfg.AppExe
 }
 
 # === FUNCOES ===
-function Find-MuMuExe {
-    $candidates = @(
-        "D:\MuMuPlayerGlobal\nx_main\MuMuNxMain.exe",
-        "D:\JOGOS\MuMuPlayerGlobal\nx_main\MuMuNxMain.exe",
-        "C:\MuMuPlayerGlobal\nx_main\MuMuNxMain.exe",
-        "$env:ProgramFiles\MuMuPlayer\nx_main\MuMuNxMain.exe",
-        "$env:ProgramFiles\MuMuPlayerGlobal\nx_main\MuMuNxMain.exe"
-    )
-    foreach ($path in $candidates) {
-        if (Test-Path $path) { return $path }
-    }
-    foreach ($root in (Get-PSDrive -PSProvider FileSystem).Root) {
-        $found = Get-ChildItem -Path $root -Filter "MuMuNxMain.exe" -Recurse -ErrorAction SilentlyContinue -Force |
-                 Select-Object -First 1
-        if ($found) { return $found.FullName }
-    }
-    return $null
-}
-
 function Set-IdleTimeout($minutes) {
     powercfg /change monitor-timeout-ac $minutes
     powercfg /change standby-timeout-ac $minutes
@@ -51,17 +34,17 @@ function Show-Notification($title, $message) {
 }
 
 # === MAIN ===
-$MuMuExe = Find-MuMuExe
-
-if (-not $MuMuExe) {
-    Show-Notification "MuMu Player" "Instalacao nao encontrada no PC."
+if (-not $AppExe -or -not (Test-Path $AppExe)) {
+    Show-Notification "Idle Manager" "Nenhum aplicativo configurado. Abra o Idle Config.exe primeiro."
     exit 1
 }
 
-Set-IdleTimeout $IdleGame
-Show-Notification "MuMu Player" "Ociosidade: $IdleGame min ativado"
+$appName = Split-Path $AppExe -Leaf
 
-Start-Process -FilePath $MuMuExe -PassThru | Wait-Process
+Set-IdleTimeout $IdleGame
+Show-Notification "Idle Manager" "$appName aberto — ociosidade: $IdleGame min"
+
+Start-Process -FilePath $AppExe -PassThru | Wait-Process
 
 Set-IdleTimeout $IdleNormal
-Show-Notification "MuMu Player" "Ociosidade: $IdleNormal min restaurado"
+Show-Notification "Idle Manager" "$appName fechado — ociosidade: $IdleNormal min restaurado"
