@@ -1,41 +1,62 @@
-# MuMu Player Idle Manager
+# MuMu Player — Idle Manager
 
-Nada demais — um script simples que ajusta o tempo de ociosidade do Windows automaticamente enquanto o MuMu Player está aberto.
+> Script simples que ajusta o tempo de ociosidade do Windows automaticamente enquanto o MuMu Player está aberto. Nada demais, só uma conveniência.
 
-## O que faz
+---
 
-- Ao abrir o MuMu Player: aumenta o timeout de ociosidade para **2 horas** (monitor e suspensão)
-- Ao fechar o MuMu Player: restaura o timeout para **10 minutos**
+## O problema
 
-Evita que o monitor apague ou o PC suspenda no meio de um jogo sem precisar mexer nas configurações de energia manualmente.
+Jogar pelo MuMu Player com o Windows configurado para suspender ou apagar o monitor em 10 minutos de inatividade é irritante. Mudar nas configurações de energia toda vez é chato, e esquecer de reverter depois também.
+
+## A solução
+
+Um executável que você abre no lugar do MuMu Player. Ele:
+
+- **Ao abrir:** define o timeout de ociosidade para **2 horas**
+- **Enquanto roda:** aguarda o MuMu Player em segundo plano (sem janelas)
+- **Ao fechar o MuMu:** restaura o timeout para **10 minutos** e encerra
+
+---
 
 ## Como usar
 
-1. Abra `MuMu Player.lnk` (atalho na pasta ou na área de trabalho)
-2. O MuMu Player inicia normalmente — o script roda em segundo plano sem janelas
-3. Ao fechar o MuMu, tudo volta ao normal automaticamente
+1. Abra `MuMu Player.exe` (ou o atalho na área de trabalho)
+2. Aceite a confirmação de administrador — necessário para alterar configurações de energia
+3. O MuMu Player abre normalmente, o resto é automático
 
-> O Windows pode pedir confirmação de administrador na primeira abertura — isso é necessário para que o script consiga alterar as configurações de energia.
+---
 
 ## Arquivos
 
 | Arquivo | Descrição |
 |---|---|
-| `MuMuLauncher.ps1` | Script principal (lógica de ociosidade) |
-| `MuMuLauncher.bat` | Invoca o PS1 sem abrir janela |
-| `MuMu Player.lnk` | Atalho com ícone do MuMu — abra este |
+| `MuMu Player.exe` | Executável final — **abra este** |
+| `MuMuLauncher.ps1` | Script fonte com a lógica |
+| `MuMuLauncher.bat` | Invoca o PS1 sem janela (usado internamente) |
+| `mumu.ico` | Ícone extraído do MuMu Player |
+
+---
 
 ## Configuração
 
-Edite as variáveis no topo do `MuMuLauncher.ps1` para ajustar os tempos:
+Para ajustar os tempos, edite as variáveis no topo do `MuMuLauncher.ps1` e regenere o `.exe`:
 
 ```powershell
-$IdleGame   = 120  # minutos durante o jogo (padrão: 2 horas)
-$IdleNormal = 10   # minutos fora do jogo  (padrão: 10 minutos)
+$IdleGame   = 120  # minutos durante o jogo  (padrão: 2 horas)
+$IdleNormal = 10   # minutos fora do jogo    (padrão: 10 minutos)
 ```
+
+Para regenerar o `.exe` após editar o `.ps1`:
+
+```powershell
+Import-Module ps2exe
+Invoke-ps2exe -InputFile "MuMuLauncher.ps1" -OutputFile "MuMu Player.exe" -IconFile "mumu.ico" -NoConsole -RequireAdmin
+```
+
+---
 
 ## Requisitos
 
 - Windows 10 / 11
 - MuMu Player instalado em `D:\MuMuPlayerGlobal`
-- PowerShell (já vem no Windows)
+- PowerShell (já incluso no Windows)
