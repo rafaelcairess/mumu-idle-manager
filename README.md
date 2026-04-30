@@ -12,9 +12,9 @@ Assistir algo pelo MuMu Player com o Windows configurado para suspender ou apaga
 
 Um executável que você abre no lugar do MuMu Player. Ele:
 
-- **Ao abrir:** define o timeout de ociosidade para **2 horas**
-- **Enquanto roda:** aguarda o MuMu Player em segundo plano (sem janelas)
-- **Ao fechar o MuMu:** restaura o timeout para **10 minutos** e encerra
+- **Ao abrir:** define o timeout de ociosidade para o tempo configurado (padrão: 2 horas)
+- **Enquanto roda:** aguarda o MuMu Player em segundo plano, sem janelas
+- **Ao fechar o MuMu:** restaura o timeout automaticamente e envia uma notificação
 
 ---
 
@@ -24,33 +24,42 @@ Um executável que você abre no lugar do MuMu Player. Ele:
 2. Aceite a confirmação de administrador — necessário para alterar configurações de energia
 3. O MuMu Player abre normalmente, o resto é automático
 
+Para ajustar os tempos, abra `MuMu Config.exe`:
+
+![config window](https://i.imgur.com/placeholder.png)
+
 ---
 
 ## Arquivos
 
 | Arquivo | Descrição |
 |---|---|
-| `MuMu Player.exe` | Executável final — **abra este** |
-| `MuMuLauncher.ps1` | Script fonte com a lógica |
-| `MuMuLauncher.bat` | Invoca o PS1 sem janela (usado internamente) |
+| `MuMu Player.exe` | Launcher principal — **abra este para assistir** |
+| `MuMu Config.exe` | Janela de configuração dos tempos de ociosidade |
+| `config.json` | Gerado pelo Config.exe com suas preferências |
+| `MuMuLauncher.ps1` | Código-fonte do launcher |
+| `MuMuConfig.ps1` | Código-fonte do configurador |
 | `mumu.ico` | Ícone extraído do MuMu Player |
 
 ---
 
 ## Configuração
 
-Para ajustar os tempos, edite as variáveis no topo do `MuMuLauncher.ps1` e regenere o `.exe`:
+Abra `MuMu Config.exe` e ajuste:
 
-```powershell
-$IdleGame   = 120  # minutos enquanto assiste  (padrão: 2 horas)
-$IdleNormal = 10   # minutos fora do MuMu      (padrão: 10 minutos)
-```
+- **Ociosidade durante o MuMu** — quanto tempo até o monitor apagar enquanto assiste (padrão: 120 min)
+- **Ociosidade ao fechar** — tempo restaurado após fechar o MuMu (padrão: 10 min)
 
-Para regenerar o `.exe` após editar o `.ps1`:
+As configurações ficam salvas em `config.json` e são lidas automaticamente pelo launcher.
+
+---
+
+## Recompilar após editar o `.ps1`
 
 ```powershell
 Import-Module ps2exe
 Invoke-ps2exe -InputFile "MuMuLauncher.ps1" -OutputFile "MuMu Player.exe" -IconFile "mumu.ico" -NoConsole -RequireAdmin
+Invoke-ps2exe -InputFile "MuMuConfig.ps1"   -OutputFile "MuMu Config.exe"  -IconFile "mumu.ico" -NoConsole
 ```
 
 ---
@@ -58,5 +67,5 @@ Invoke-ps2exe -InputFile "MuMuLauncher.ps1" -OutputFile "MuMu Player.exe" -IconF
 ## Requisitos
 
 - Windows 10 / 11
-- MuMu Player instalado em `D:\MuMuPlayerGlobal`
+- MuMu Player (detectado automaticamente em qualquer caminho)
 - PowerShell (já incluso no Windows)

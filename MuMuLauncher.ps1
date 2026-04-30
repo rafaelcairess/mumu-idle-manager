@@ -1,6 +1,13 @@
-# === CONFIGURACOES ===
-$IdleGame   = 120  # minutos enquanto assiste (2 horas)
-$IdleNormal = 10   # minutos fora do MuMu    (10 minutos)
+# === CONFIGURACOES (padroes — sobrescritos por config.json se existir) ===
+$IdleGame   = 120
+$IdleNormal = 10
+
+$configPath = "$PSScriptRoot\config.json"
+if (Test-Path $configPath) {
+    $cfg        = Get-Content $configPath | ConvertFrom-Json
+    $IdleGame   = $cfg.IdleGame
+    $IdleNormal = $cfg.IdleNormal
+}
 
 # === FUNCOES ===
 function Find-MuMuExe {
@@ -52,9 +59,9 @@ if (-not $MuMuExe) {
 }
 
 Set-IdleTimeout $IdleGame
-Show-Notification "MuMu Player" "Ociosidade: 2 horas ativado"
+Show-Notification "MuMu Player" "Ociosidade: $IdleGame min ativado"
 
 Start-Process -FilePath $MuMuExe -PassThru | Wait-Process
 
 Set-IdleTimeout $IdleNormal
-Show-Notification "MuMu Player" "Ociosidade: 10 minutos restaurado"
+Show-Notification "MuMu Player" "Ociosidade: $IdleNormal min restaurado"
