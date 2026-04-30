@@ -8,9 +8,9 @@ public static class IFEORunner
 {
     public static void Run(string[] args)
     {
-        string appPath = args[0];
-        string appName = Path.GetFileName(appPath);
-        string[] passArgs = args.Length > 1 ? args[1..] : Array.Empty<string>();
+        string appPath  = args[0];
+        string appName  = Path.GetFileName(appPath);
+        string passArgs = args.Length > 1 ? string.Join(" ", args[1..]) : "";
 
         int count = RunningCounter.Increment();
 
@@ -22,8 +22,11 @@ public static class IFEORunner
 
         try
         {
-            var psi = new ProcessStartInfo(appPath) { UseShellExecute = true };
-            foreach (var arg in passArgs) psi.ArgumentList.Add(arg);
+            var psi = new ProcessStartInfo(appPath)
+            {
+                UseShellExecute = false,
+                Arguments       = passArgs
+            };
             Process.Start(psi)?.WaitForExit();
         }
         finally

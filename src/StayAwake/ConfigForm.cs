@@ -90,17 +90,10 @@ public class ConfigForm : Form
 
     private void OnAdd(object? sender, EventArgs e)
     {
-        using var dlg = new OpenFileDialog
-        {
-            Filter = "Executável (*.exe)|*.exe",
-            Title  = "Selecione o aplicativo"
-        };
-        if (dlg.ShowDialog() == DialogResult.OK)
-        {
-            var name = Path.GetFileName(dlg.FileName);
-            if (!_list.Items.Contains(name))
-                _list.Items.Add(name);
-        }
+        using var picker = new ProcessPickerForm();
+        if (picker.ShowDialog(this) == DialogResult.OK && picker.SelectedExeName != null)
+            if (!_list.Items.Contains(picker.SelectedExeName))
+                _list.Items.Add(picker.SelectedExeName);
     }
 
     private void OnSave(object? sender, EventArgs e)

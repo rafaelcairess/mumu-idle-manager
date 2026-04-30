@@ -12,8 +12,15 @@ static class Program
 
         if (args.Length > 0)
         {
-            // Modo IFEO — chamado pelo Windows ao abrir um app monitorado
-            IFEORunner.Run(args);
+            // Modo IFEO — roda em background com message pump ativo
+            // (sem message pump o Windows mostra cursor de carregamento indefinidamente)
+            var context = new ApplicationContext();
+            Task.Run(() =>
+            {
+                IFEORunner.Run(args);
+                context.ExitThread();
+            });
+            Application.Run(context);
         }
         else
         {
@@ -30,19 +37,20 @@ static class Program
     private static bool IsAdmin()
     {
         using var identity = WindowsIdentity.GetCurrent();
-        var principal = new WindowsPrincipal(identity);
-        return principal.IsInRole(WindowsBuiltInRole.Administrator);
+        return new WindowsPrincipal(identity).IsInRole(WindowsBuiltInRole.Administrator);
     }
 
     private static void RestartAsAdmin()
     {
-        var psi = new System.Diagnostics.ProcessStartInfo
+        try
         {
-            FileName        = Environment.ProcessPath ?? "StayAwake.exe",
-            UseShellExecute = true,
-            Verb            = "runas"
-        };
-        try { System.Diagnostics.Process.Start(psi); }
-        catch { /* usuário cancelou o UAC */ }
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+            {
+                FileName        = Environment.ProcessPath ?? "StayAwake.exe",
+                UseShellExecute = true,
+                Verb            = "runas"
+            });
+        }
+        catch { /* usuário cancelou UAC */ }
     }
 }
