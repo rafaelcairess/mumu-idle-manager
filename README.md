@@ -1,62 +1,53 @@
-# Idle Manager
+# StayAwake
 
-> Ajusta o tempo de ociosidade do Windows automaticamente quando um app escolhido está aberto. Você abre o app normalmente — o Idle Manager entra junto e sai junto. Nada fica rodando em background.
+Cansado de o Windows apagar o monitor ou suspender o PC no meio do que você está assistindo ou fazendo? O StayAwake resolve isso — você configura uma vez e esquece.
+
+Ele fica de olho nos apps que você escolheu. Quando um abre, o Windows para de dormir. Quando fecha, tudo volta ao normal automaticamente.
 
 ---
 
 ## Como funciona
 
-O Idle Manager usa um recurso nativo do Windows chamado **IFEO** para "entrar junto" com qualquer app configurado. Você continua abrindo o app da mesma forma que sempre abriu — o Idle Manager detecta isso e age automaticamente.
+O StayAwake usa um recurso nativo do Windows chamado IFEO *(Image File Execution Options)* para entrar junto com qualquer app que você configurar. Você continua abrindo seus apps do jeito que sempre abriu — ele só entra em cena quando precisa.
 
-```
-Você abre o app → Idle Manager ativa → ociosidade: 2h
-Você fecha o app → Idle Manager encerra → ociosidade: 10min
-```
-
-Nada fica rodando quando nenhum app monitorado está aberto.
+Nenhum processo fica rodando em background. O StayAwake só existe enquanto um dos seus apps estiver aberto.
 
 ---
 
-## Como usar
+## Primeiros passos
 
-**1. Configure uma vez:**
+**1. Abra o `StayAwake.exe`**
 
-Abra `IdleManager.exe` → clique em `+ Adicionar app` → selecione o `.exe` desejado → ajuste os tempos → Salvar.
+A tela de configuração vai aparecer.
 
-**2. Use normalmente:**
+**2. Adicione seus apps**
 
-Abra seu app do jeito que sempre abre. O Idle Manager cuida do resto automaticamente.
+Clique em `+ Adicionar app` e selecione o `.exe` de qualquer programa que você queira monitorar. Pode adicionar quantos quiser.
 
----
+**3. Ajuste os tempos se quiser**
 
-## Múltiplos apps
+O padrão já funciona bem pra maioria dos casos:
+- **Durante o app:** 120 minutos
+- **Depois de fechar:** 10 minutos
 
-Você pode monitorar quantos apps quiser. Se dois estiverem abertos ao mesmo tempo, a ociosidade só é restaurada quando o **último** fechar.
+**4. Salve e pronto**
 
----
-
-## Configuração
-
-| Campo | Descrição | Padrão |
-|---|---|---|
-| Apps monitorados | Lista de `.exe` a interceptar | — |
-| Ociosidade durante o app | Timeout enquanto o app estiver aberto | 120 min |
-| Ociosidade ao fechar | Timeout restaurado após fechar | 10 min |
+A partir daí, abra seus apps normalmente. O StayAwake cuida do resto.
 
 ---
 
-## Arquivos
+## Sem mistério
 
-| Arquivo | Descrição |
+| Situação | O que acontece |
 |---|---|
-| `IdleManager.exe` | Único executável — configurador + motor |
-| `IdleManager.ps1` | Código-fonte |
-| `config.json` | Configurações salvas |
+| Você abre um app monitorado | Timeout vira o que você configurou |
+| Dois apps monitorados abertos | Timeout permanece estendido |
+| Último app monitorado fecha | Timeout volta ao normal |
+| Nenhum app monitorado aberto | StayAwake não está nem em memória |
 
 ---
 
 ## Requisitos
 
-- Windows 10 / 11
-- PowerShell (já incluso no Windows)
-- Permissão de administrador (necessário para registrar os apps no sistema)
+- Windows 10 ou 11
+- Permissão de administrador na primeira configuração

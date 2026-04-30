@@ -3,8 +3,8 @@ Add-Type -AssemblyName System.Drawing
 
 $configPath  = "$PSScriptRoot\config.json"
 $runningPath = "$PSScriptRoot\running.json"
-$selfExe     = "$PSScriptRoot\IdleManager.exe"
-$icoPath     = "$PSScriptRoot\idle.ico"
+$selfExe     = "$PSScriptRoot\StayAwake.exe"
+$icoPath     = "$PSScriptRoot\stayawake.ico"
 $IFEO_KEY    = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options"
 
 # === HELPERS ===
@@ -68,7 +68,7 @@ if ($args.Count -gt 0) {
 
     if ($count -eq 0) {
         Set-IdleTimeout $cfg.IdleGame
-        Show-Notification "Idle Manager" "$appName aberto — ociosidade: $($cfg.IdleGame) min"
+        Show-Notification "StayAwake" "$appName aberto — ociosidade: $($cfg.IdleGame) min"
     }
 
     $passArgs = $args | Select-Object -Skip 1
@@ -83,7 +83,7 @@ if ($args.Count -gt 0) {
 
     if ((Get-RunningCount) -eq 0) {
         Set-IdleTimeout $cfg.IdleNormal
-        Show-Notification "Idle Manager" "$appName fechado — ociosidade: $($cfg.IdleNormal) min restaurado"
+        Show-Notification "StayAwake" "$appName fechado — ociosidade: $($cfg.IdleNormal) min restaurado"
         if (Test-Path $runningPath) { Remove-Item $runningPath -Force }
     }
 
@@ -97,7 +97,7 @@ $cfg = Load-Config
 
 # --- FORM PRINCIPAL ---
 $form                 = New-Object System.Windows.Forms.Form
-$form.Text            = "Idle Manager"
+$form.Text            = "StayAwake"
 $form.Size            = New-Object System.Drawing.Size(420, 340)
 $form.StartPosition   = "CenterScreen"
 $form.FormBorderStyle = "FixedDialog"
@@ -199,6 +199,6 @@ if ($form.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) {
 
     [System.Windows.Forms.MessageBox]::Show(
         "Salvo! $($newApps.Count) app(s) monitorado(s).",
-        "Idle Manager", "OK", "Information"
+        "StayAwake", "OK", "Information"
     )
 }
